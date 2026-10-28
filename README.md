@@ -1,19 +1,21 @@
 # My ABC Forest Friends
 
-A playable woodland animal spelling game made with the supplied forest illustrations, original recorded pronunciations and background music.
+A playable and illustrated woodland spelling game for young children.
 
-## Run locally
+The artwork has been converted to **lossless WebP** to reduce website loading time without changing image pixels. The supplied spoken animal names and music are unchanged.
 
-With Node.js 20+, run `npm install`, `npm run build`, and `npm run dev`. Open `http://localhost:4173`.
+## Local run
 
-## Vercel
+```sh
+npm install
+npm run build
+npm run dev
+```
 
-The game uses `npm run build` to output the `dist` directory. `vercel.json` configures the deployment. Upload all files from the supplied project archive, including `public/assets`, before deploying.
+## Deployment
 
-## Game
+Vercel: Framework Other / Build `npm run build` / Output directory `dist`.
 
-Ten animal levels, five vowel choices, sound settings, best scores saved locally, and an episode placeholder.
+## License
 
-## Rights
-
-No open-source license has been granted. Confirm rights to externally sourced music before public commercial distribution.
+All rights reserved. No open source license is granted.

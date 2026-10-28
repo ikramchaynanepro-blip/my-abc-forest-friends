@@ -1,0 +1,4 @@
+import http from 'node:http';import fs from 'node:fs';import path from 'node:path';
+const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.mp3':'audio/mpeg','.svg':'image/svg+xml'};
+const root=path.resolve('public'); const port=process.env.PORT||4173;
+http.createServer((req,res)=>{const p=decodeURI(req.url?.split('?')[0]||'/');const file=path.resolve(root,'.'+(p==='/'?'/index.html':p));if(!file.startsWith(root)){res.writeHead(403);res.end();return}fs.readFile(file,(err,data)=>{if(err){res.writeHead(404);res.end('Not found');return}res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream','Cache-Control':file.endsWith('.html')?'no-cache':'public,max-age=3600'});res.end(data)})}).listen(port,'0.0.0.0',()=>console.log(`Forest Friends on http://localhost:${port}`));
