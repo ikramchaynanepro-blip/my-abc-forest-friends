@@ -1,0 +1,42 @@
+name: Assemble My ABC Forest Friends
+
+on:
+  push:
+    paths:
+      - '.github/workflows/assemble-forest.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@11bd71901bbe5b163ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: true
+      - name: Reassemble and verify the complete uploaded project
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat import-chunks/forest_000.b64 import-chunks/forest_{01..11}.b64 | base64 --decode > project.zip
+          echo '7b894186cf0d49d836d47f8e65e3a467af9cf5c35ae00b0aa2c8422e38425b54  project.zip' | sha256sum -c -
+          mkdir -p project-extracted
+          unzip -q project.zip -d project-extracted
+          test -f project-extracted/public/index.html
+          test -f project-extracted/public/assets/music.mp3
+          test -f project-extracted/src/app.ts
+          cp -a project-extracted/. .
+          rm -rf project-extracted project.zip import-chunks
+      - name: Commit the real project files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --quiet || git commit -m 'Publish complete Forest Friends game with illustrations and audio'
+          git push origin HEAD:main
